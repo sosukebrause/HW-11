@@ -1,20 +1,49 @@
+// const store = require("../db/store.js");
 const express = require("express");
 const router = express.Router();
+const util = require("util");
+const fs = require("fs");
+const store = require("../db/store");
+// const {getNotes, saveNote, deleteNote, getAndRenderNotes} = require("../public/assets/js")
+const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
 
-router.get("/api", (req, res) => {
-  res.json("you succesfuly made a request to my api");
+router.get("/notes", (req, res) => {
+  console.log("hit");
+
+  store
+    .getNotes()
+    .then((note) => {
+      res.json(note);
+    })
+    .catch((err) => res.status(500).json(err));
+  // const data = readFileAsync("../db/db.json", "utf8");
+  // const { notes } = JSON.parse(data);
+  // res.json(notes);
 });
 
-router.get("/api/all", (req, res) => {
-  res.json("this came from the server");
+router.delete("/notes/:id", (req, res) => {
+  // find by id // res.send(req.params.id);
+  // console.log(parseInt(req.params.id));
+  const id = parseInt(req.params.id);
+  showTodo(id)
+    .then((todo) => res.json(todo))
+    .catch((err) => res.json(err));
 });
 
-router.post("/api/test", (req, res) => {
-  res.json("this came from the server");
+router.post("/notes", (req, res) => {
+  store
+    .createNote(req.body)
+    .then((note) => {
+      res.json(note);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
 });
 
 const todoArray = [];
-router.post("/api/todo", (req, res) => {
+router.post("/todo", (req, res) => {
   todoArray.push(req.body);
   console.log(todoArray);
   res.json(todoArray);
