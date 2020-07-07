@@ -4,22 +4,16 @@ const router = express.Router();
 const util = require("util");
 const fs = require("fs");
 const store = require("../db/store");
-// const {getNotes, saveNote, deleteNote, getAndRenderNotes} = require("../public/assets/js")
-const readFileAsync = util.promisify(fs.readFile);
-const writeFileAsync = util.promisify(fs.writeFile);
 
 router.get("/notes", (req, res) => {
-  console.log("hit");
-
+  console.log("hit me");
   store
     .getNotes()
     .then((note) => {
       res.json(note);
+      console.log(note);
     })
     .catch((err) => res.status(500).json(err));
-  // const data = readFileAsync("../db/db.json", "utf8");
-  // const { notes } = JSON.parse(data);
-  // res.json(notes);
 });
 
 router.delete("/notes/:id", (req, res) => {
@@ -45,7 +39,7 @@ router.post("/notes", (req, res) => {
 const todoArray = [];
 router.post("/todo", (req, res) => {
   todoArray.push(req.body);
-  console.log(todoArray);
+  // console.log(todoArray);
   res.json(todoArray);
 });
 // /api/all

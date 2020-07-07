@@ -13,21 +13,18 @@ class Store {
   }
   getNotes() {
     return this.read().then((notes) => {
-      // let parsedNotes;
-      console.log(notes);
-
       let parsedNotes = [].concat(JSON.parse(notes));
       return parsedNotes;
     });
   }
 
   createNote(entry) {
-    console.log(entry);
-
     const { title, text } = entry;
+    console.log(entry);
     if (!title || !text) {
       throw new Error("Note 'title' and 'text' cannot be blank");
     }
+
     // Add a unique id to the note using uuid package
     const newNote = { title, text };
     // Get all notes, add the new note, write all the updated notes, return the newNote
